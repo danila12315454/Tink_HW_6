@@ -1,0 +1,68 @@
+name: CICD
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  style_check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.10" ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Build docker image
+        run: make build_test_docker
+
+      - name: Style check
+        run: make lint_on_docker
+
+  security_check:
+    needs: style_check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.10" ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Build docker image
+        run: make build_test_docker
+
+      - name: Security check
+        run: make security_check_on_docker
+
+  tests:
+    needs: style_check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [ "3.10" ]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Build docker image
+        run: make build_test_docker
+      - name: Run tests
+        run: make test_on_docker
+
+  deploy:
+    needs: [tests, security_check]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker
+        run: docker-compose build server
+

@@ -1,0 +1,63 @@
+[build-system]
+requires = ["poetry-core>=1.0.0", "setuptools>=68.1"]
+build-backend = "setuptools.build_meta"
+
+[tool.poetry]
+name = "homework_5"
+version = "0.0.1"
+authors = ["Danila Prigulskiy <danilaprig@gmail.com>"]
+description = "A Tinkoff Python AB hw-5 package"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+sqlalchemy = "^2.0.22"
+pydantic = "^2.4.2"
+fastapi = "^0.103.2"
+validators = "^0.22.0"
+uvicorn = "^0.23.2"
+python-dotenv = "^1.0.0"
+pydantic-settings = "^2.0.3"
+httpx = "^0.25.0"
+
+
+
+[tool.poetry.dev-dependencies]
+pytest-coverage = "^0.0"
+pytest = "^7.4.2"
+pytest-asyncio = "^0.15.1"
+pylint = "^3.0.1"
+watchdog = "^3.0.0"
+black = "^23.9.1"
+flake8 = "^6.1.0"
+flake8-todo = "^0.7"
+types-requests = "^2.31.0.9"
+mypy = "^1.6.0"
+alembic = "^1.12.0"
+faker = "^19.10.0"
+isort = "^5.12.0"
+bandit = "^1.7.5"
+
+[build]
+script = "poetry build"
+
+[tool.black]
+line-length = 79
+skip-string-normalization = true
+
+[tool.flake8]
+ban-todos = true
+
+[tool.mypy]
+plugins = ["sqlalchemy.ext.mypy.plugin"]
+strict = true
+
+[tool.isort]
+line_length = 80
+multi_line_output = 3
+include_trailing_comma = true
